@@ -5,10 +5,19 @@ Retrieves data from the LL API and processes the result.
 import requests
 
 
-def get_launches(total=5):
+def request_launches(total=5):
     url = f"https://launchlibrary.net/1.4/launch?mode=verbose&next={total}"
     data = requests.get(url, timeout=5)
     return data.json()
+
+
+def get_launches():
+    data_dict = request_launches()
+    launches = [Launch(l) for l in data_dict['launches']]
+
+    for k, l in enumerate(launches):
+        print(k, l.name, l.location, l.t0, l.status_desc, l.rocket_img)
+        print('----------')
 
 
 class Launch(object):
@@ -41,9 +50,4 @@ class Launch(object):
 
 
 if __name__ == '__main__':
-    data_dict = get_launches()
-    launches = [Launch(l) for l in data_dict['launches']]
-
-    for k, l in enumerate(launches):
-        print(k, l.name, l.location, l.t0, l.status_desc, l.rocket_img)
-        print('----------')
+    get_launches()
