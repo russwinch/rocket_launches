@@ -1,0 +1,45 @@
+body {
+    width: 300px;
+    margin: 2px;
+    font-family: Gotham, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+h1 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 5px;
+    margin-bottom: 2px;
+}
+
+h2 {
+    font-size: 15px;
+    font-weight: normal;
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+
+#nav a {
+    font-size: 15px;
+    color: #9C9C9C;
+}
+
+#location {
+    font-size: 15px;
+}
+
+#T0 {
+    font-size: 18px;
+}
+
+#status {
+    font-size: 13px;
+}
+
+#latlong {
+    font-size: 10px;
+}
+
+#rocket {
+    max-width: 100px;
+    max-height: 100px;
+}

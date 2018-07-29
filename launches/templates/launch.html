@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+    <head>
+        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+    </head>
+    <body>
+        <div id="nav">
+            <a href="{{ prev }}">&lt;prev</a> | <a href="{{ next }}">next&gt;</a>
+        </div>
+        <h1>{{ rocket_name }}</h1>
+        {% for mission in missions %}
+            <h2>{{ mission }}</h2>
+        {% endfor %}
+        <div id="T0">T-0: {{ t0 }}</div>
+        <div id="location">{{ location }}</div>
+        <div id="status">Status: {{ status_desc }}</div>
+        {% if rocket_img %}
+            <img id="rocket" src="{{ rocket_img }}">
+        {% endif %}
+        <div id="latlong">latitude: {{ pad_latitude }} | longitude: {{
+            pad_longitude }}</div>
+    </body>
+</html>
