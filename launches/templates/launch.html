@@ -2,8 +2,9 @@
 <html>
     <head>
         <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+        <script type=text/javascript src={{ url_for('static', filename='timer.js') }}></script>
     </head>
-    <body>
+    <body onload="startTime({{ t0_timestamp }})">
         <div id="nav">
             <a href="{{ prev }}">&lt;prev</a> | <a href="{{ next }}">next&gt;</a>
         </div>
@@ -19,7 +20,8 @@
                 <span class="mission-name">Unknown mission(s)</span>
             {% endif %}
         </div>
-        <div id="T0">T-0: {{ t0_local }}</div>
+        <div class="t0">T-0: {{ t0_local }}</div>
+        <div class="t0"><span id="txt"></span></div>
         <div id="location">{{ location }}</div>
         <div id="status">Status: {{ status_desc }}</div>
         {% if rocket_img %}
