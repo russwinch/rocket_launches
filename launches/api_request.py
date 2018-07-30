@@ -55,7 +55,9 @@ class Launch(object):
             'hold_reason': data['holdreason'],
             'fail_reason': data['failreason'],
             'rocket_name': data['rocket']['name'],
-            'utc-t0': data['net']
+            'utc_t0': data['net'],
+            'tbd_date': data['tbddate'],
+            'tbd_time': data['tbdtime']
         }
 
         utc_launch_time = datetime.datetime.strptime(f"{data['isonet']}+0000",

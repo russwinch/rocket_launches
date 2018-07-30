@@ -24,7 +24,7 @@ function startTime(t0) {
     hours = padTime(hours);
     minutes = padTime(minutes);
     seconds = padTime(seconds);
-    document.getElementById('txt').innerHTML =
+    document.getElementById('timer').innerHTML =
         days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
     var t = setTimeout(startTime, 500, t0);
 }

@@ -20,8 +20,15 @@
                 <span class="mission-name">Unknown mission(s)</span>
             {% endif %}
         </div>
-        <div class="t0">T-0: {{ t0_local }}</div>
-        <span class="t0"><span id="txt"></span></span>
+        <div class="t0">
+            T-0:
+            {% if tbd_date or tbd_time %}
+                TBD
+            {% else %}
+                {{ t0_local }}<br />
+                <span id="timer"></span>
+            {% endif %}
+        </div>
         <span id="status">Status: {{ status_desc }}</span>
         <div id="lower">
             <div id="map-box">
