@@ -12,10 +12,11 @@ def upcoming_launch(key):
     logging.debug(key)
     try:
         launches = api_request.get_launches()
-    except Exception:
+        launch = launches[key]
+    except Exception as e:
+        raise e
         # more error catching here
         pass
-    launch = launches[key]
     prev_launch, next_launch = key - 1, key + 1
     if prev_launch < 0:
         prev_launch = len(launches) - 1

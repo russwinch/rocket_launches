@@ -1,9 +1,11 @@
 """
 Retrieves data from the LL API and processes the result.
 """
+import datetime
 import json
 import logging
 import requests
+import time
 
 
 def request_launches(total=5):
@@ -37,19 +39,33 @@ class Launch(object):
         status_dict = {1: 'Green',
                        2: 'Red',
                        3: 'Success',
-                       4: 'Failed'}
+                       4: 'Failed'
+                       }
         return status_dict[status_int]
 
     def __init__(self, data):
-        self.context = {}
-        self.context['id'] = data['id']
-        self.context['name'] = data['name']
-        self.context['location'] = data['location']['name']
-        self.context['pad_latitude'] = data['location']['pads'][0]['latitude']
-        self.context['pad_longitude'] = data['location']['pads'][0]['longitude']
-        self.context['t0'] = data['net']
+        self.context = {
+            'id': data['id'],
+            'name': data['name'],
+            'location': data['location']['name'],
+            'pad_latitude': data['location']['pads'][0]['latitude'],
+            'pad_longitude': data['location']['pads'][0]['longitude'],
+            'status_code': data['status'],  # (1 Green, 2 Red, 3 Success, 4 Failed)
+            'status_desc': self._status_decoder(data['status']),
+            'hold_reason': data['holdreason'],
+            'fail_reason': data['failreason'],
+            'rocket_name': data['rocket']['name'],
+            'utc-t0': data['net']
+        }
 
-        self.context['rocket_name'] = data['rocket']['name']
+        utc_launch_time = datetime.datetime.strptime(f"{data['isonet']}+0000",
+                                                     "%Y%m%dT%H%M%SZ%z")
+        launch_timestamp = utc_launch_time.timestamp()
+        local_launch_time = time.localtime(launch_timestamp)
+        self.context['t0_timestamp'] = launch_timestamp
+        self.context['t0_local'] = time.strftime("%a %d %b %y %H:%M %Z (local)",
+                                                 local_launch_time)
+
         image = data['rocket']['imageURL']
         if 'placeholder' in image:
             image = None
@@ -63,10 +79,6 @@ class Launch(object):
                              'mission_type': m['typeName']
                              })
         self.context['missions'] = missions
-        self.context['status_code'] = data['status']  # (1 Green, 2 Red, 3 Success, 4 Failed)
-        self.context['status_desc'] = self._status_decoder(self.context['status_code'])
-        self.context['hold_reason'] = data['holdreason']
-        self.context['fail_reason'] = data['failreason']
 
 
 if __name__ == '__main__':
