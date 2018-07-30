@@ -1,7 +1,7 @@
 """
 Retrieves data from the LL API and processes the result.
 """
-
+import json
 import logging
 import requests
 
@@ -14,6 +14,7 @@ def request_launches(total=5):
     except Exception:
         # catch timeout etc here
         pass
+    logging.debug(f"JSON: {json.dumps(data.json(), indent=2)}")
     return data.json()
 
 
@@ -21,9 +22,7 @@ def get_launches():
     data_dict = request_launches()
     launches = [Launch(l) for l in data_dict['launches']]
 
-    # for k, l in enumerate(launches):
-    #     logging.debug(k, l.name, l.location, l.t0, l.status_desc, l.rocket_img)
-
+    logging.debug(f"Generated context: {[launch.context for launch in launches]}")
     return launches
 
 
@@ -56,8 +55,14 @@ class Launch(object):
             image = None
         self.context['rocket_img'] = image
 
-        self.context['missions'] = [data['missions'][m]['name'] for m, _ in
-                enumerate(data['missions'])]
+        missions = []
+        for k, m in enumerate(data['missions']):
+            missions.append({'mission_key': k,
+                             'mission_name': m['name'],
+                             'mission_desc': m['description'],
+                             'mission_type': m['typeName']
+                             })
+        self.context['missions'] = missions
         self.context['status_code'] = data['status']  # (1 Green, 2 Red, 3 Success, 4 Failed)
         self.context['status_desc'] = self._status_decoder(self.context['status_code'])
         self.context['hold_reason'] = data['holdreason']

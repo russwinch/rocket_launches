@@ -10,8 +10,11 @@ def index():
 
 def upcoming_launch(key):
     logging.debug(key)
-    key = int(key)
-    launches = api_request.get_launches()
+    try:
+        launches = api_request.get_launches()
+    except Exception:
+        # more error catching here
+        pass
     launch = launches[key]
     prev_launch, next_launch = key - 1, key + 1
     if prev_launch < 0:
@@ -20,7 +23,18 @@ def upcoming_launch(key):
         next_launch = 0
     launch.context['next'] = next_launch
     launch.context['prev'] = prev_launch
-    return render_template("launch.html", **launch.context)
+    return render_template("launch.html", key=key, **launch.context)
+
+
+def mission_details(key, mkey):
+    try:
+        launches = api_request.get_launches()
+    except Exception:
+        # more error catching here
+        pass
+    launch = launches[key]
+    context = launch.context['missions'][mkey]
+    return render_template("mission.html", key=key, **context)
 
 
 def launch_map():

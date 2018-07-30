@@ -18,7 +18,8 @@ def create_app():
     app = Flask(__name__)
 
     app.add_url_rule('/', 'index', views.index)
-    app.add_url_rule('/launch/<key>', 'upcoming_launch', views.upcoming_launch)
+    app.add_url_rule('/launch/<int:key>', 'upcoming_launch', views.upcoming_launch)
     app.add_url_rule('/map', 'launch_map', views.launch_map)
+    app.add_url_rule('/launch/<int:key>/mission/<int:mkey>', 'mission_details', views.mission_details)
 
     return app

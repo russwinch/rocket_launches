@@ -8,14 +8,28 @@ h1 {
     font-size: 20px;
     font-weight: bold;
     margin-top: 5px;
-    margin-bottom: 2px;
+    margin-bottom: 0px;
 }
 
-h2 {
+#missions a {
+    color: black;
+}
+
+.mission-name {
     font-size: 15px;
-    font-weight: normal;
-    margin-top: 1px;
+    font-weight: bold;
     margin-bottom: 1px;
+}
+
+.mission-type {
+    font-size: 13px;
+    font-weight: normal;
+    margin-bottom: 1px;
+}
+
+#mission-desc {
+    margin-top: 7px;
+    font-size: 15px;
 }
 
 #nav a {
@@ -39,7 +53,8 @@ h2 {
     font-size: 10px;
 }
 
-#rocket {
+
+#rocket-img {
     max-width: 100px;
     max-height: 100px;
 }

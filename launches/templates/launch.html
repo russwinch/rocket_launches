@@ -8,14 +8,22 @@
             <a href="{{ prev }}">&lt;prev</a> | <a href="{{ next }}">next&gt;</a>
         </div>
         <h1>{{ rocket_name }}</h1>
-        {% for mission in missions %}
-            <h2>{{ mission }}</h2>
-        {% endfor %}
+        <div id="missions">
+            {% if missions %}
+                {% for mission in missions %}
+                <a href="/launch/{{ key }}/mission/{{ mission.mission_key }}">
+                    <span class="mission-name">{{ mission.mission_name }}</span>
+                </a>
+                {% endfor %}
+            {% else %}
+                <span class="mission-name">Unknown mission(s)</span>
+            {% endif %}
+        </div>
         <div id="T0">T-0: {{ t0 }}</div>
         <div id="location">{{ location }}</div>
         <div id="status">Status: {{ status_desc }}</div>
         {% if rocket_img %}
-            <img id="rocket" src="{{ rocket_img }}">
+            <img id="rocket-img" src="{{ rocket_img }}">
         {% endif %}
         <div id="latlong">latitude: {{ pad_latitude }} | longitude: {{
             pad_longitude }}</div>
