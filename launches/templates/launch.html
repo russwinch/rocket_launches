@@ -21,13 +21,18 @@
             {% endif %}
         </div>
         <div class="t0">T-0: {{ t0_local }}</div>
-        {% if rocket_img %}
-            <img id="rocket-img" src="{{ rocket_img }}">
+        <span class="t0"><span id="txt"></span></span>
+        <span id="status">Status: {{ status_desc }}</span>
+        <div id="lower">
+            <div id="map-box">
+                <div id="location">{{ location }}</div>
+                <div id="latlong">latitude: {{ pad_latitude }} | longitude: {{ pad_longitude }}</div>
+            </div>
+            {% if rocket_img %}
+            <div id="rocket-img">
+                <img id="rocket-img" src="{{ rocket_img }}">
+            </div>
+        </div>
         {% endif %}
-        <div class="t0"><span id="txt"></span></div>
-        <div id="status">Status: {{ status_desc }}</div>
-        <div id="location">{{ location }}</div>
-        <div id="latlong">latitude: {{ pad_latitude }} | longitude: {{
-            pad_longitude }}</div>
     </body>
 </html>

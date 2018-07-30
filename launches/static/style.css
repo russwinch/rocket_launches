@@ -1,5 +1,6 @@
 body {
     width: 315px;
+    height: 235px;
     margin: 2px;
     font-family: Gotham, "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
@@ -53,11 +54,15 @@ h1 {
     font-size: 10px;
 }
 
-
 #rocket-img {
-    max-width: 170px;
-    max-height: 140px;
-    bottom: 5px;
-    right: 5px;
-    position: absolute;
+    float: right;
+    width:40%;
+}
+
+#rocket-img img {
+}
+
+#map-box {
+    float:left;
+    width:60%;
 }
