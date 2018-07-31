@@ -38,5 +38,16 @@ def mission_details(key, mkey):
     return render_template("mission.html", key=key, **context)
 
 
-def launch_map():
-    return render_template("map.html")
+def launch_map(key):
+    try:
+        launches = api_request.get_launches()
+    except Exception:
+        # more error catching here
+        pass
+    launch = launches[key]
+    context = {
+        'latitude': launch.context['pad_latitude'],
+        'longitude': launch.context['pad_longitude'],
+        'pad_name': launch.context['pad_name']
+    }
+    return render_template("map.html", key=key, **context)

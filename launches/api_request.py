@@ -50,6 +50,7 @@ class Launch(object):
             'location': data['location']['name'],
             'pad_latitude': data['location']['pads'][0]['latitude'],
             'pad_longitude': data['location']['pads'][0]['longitude'],
+            'pad_name': data['location']['pads'][0]['name'],
             'status_code': data['status'],  # (1 Green, 2 Red, 3 Success, 4 Failed)
             'status_desc': self._status_decoder(data['status']),
             'hold_reason': data['holdreason'],
