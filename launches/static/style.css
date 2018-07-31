@@ -1,6 +1,5 @@
 body {
-    width: 315px;
-    height: 235px;
+    width: 310px;
     margin: 2px;
     font-family: Gotham, "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
@@ -10,6 +9,18 @@ h1 {
     font-weight: bold;
     margin-top: 5px;
     margin-bottom: 0px;
+}
+
+#map-title {
+    font-size: 15px;
+    font-weight: bold;
+    width: 250px;
+    height: 40px;
+}
+
+#mapid {
+    height: 195px;
+    width: 315px;
 }
 
 #missions a {
@@ -33,12 +44,7 @@ h1 {
     font-size: 15px;
 }
 
-#nav a {
-    font-size: 15px;
-    color: #9C9C9C;
-}
-
-#back {
+#nav {
     position: absolute;
     right: 0px;
     top: 0px;
@@ -47,14 +53,18 @@ h1 {
     padding: 5px;
 }
 
-#back a {
+#nav a {
     font-size: 15px;
-    color: black;
+    color: #9C9C9C;
     text-decoration: none;
 }
 
 #location {
     font-size: 15px;
+}
+
+#location a {
+    color: black;
 }
 
 .T0 {
@@ -70,16 +80,20 @@ h1 {
 }
 
 #rocket-img {
-    float: right;
-    width:40%;
 }
 
 #rocket-img img {
+    float: right;
+    height: 185px;
+    width: 110px;
+    object-fit: cover;
+}
+
+#lower {
+    width: 300px;
 }
 
 #map-box {
-    float:left;
-    width:60%;
 }
 
 .leaflet-control-attribution {

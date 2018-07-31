@@ -20,27 +20,25 @@
                 <span class="mission-name">Unknown mission(s)</span>
             {% endif %}
         </div>
+        {% if rocket_img %}
+            <div id="rocket-img">
+                <img src="{{ rocket_img }}">
+            </div>
+        {% endif %}
         <div class="t0">
             T-0:
             {% if tbd_date or tbd_time %}
-                TBD
+                TBD {{ t0_month }}
             {% else %}
-                {{ t0_local }}<br />
-                <span id="timer"></span>
+                {{ t0_local }}
+                <div id="timer"></div>
             {% endif %}
         </div>
         <span id="status">Status: {{ status_desc }}</span>
         <div id="lower">
             <div id="map-box">
-                <div id="location">{{ location }}</div>
-                <div id="latlong">latitude: {{ pad_latitude }} | longitude: {{ pad_longitude }}</div>
-            </div>
-            {% if rocket_img %}
-            <div id="rocket-img">
-                <img id="rocket-img" src="{{ rocket_img }}">
+                <div id="location"><a href="/map/{{ key }}">{{ location }}</a></div>
             </div>
         </div>
-        {% endif %}
-        <a href="/map/{{ key }}">Launch pad</a>
     </body>
 </html>

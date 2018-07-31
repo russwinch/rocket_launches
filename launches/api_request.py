@@ -8,7 +8,7 @@ import requests
 import time
 
 
-def request_launches(total=5):
+def request_launches(total=8):
     url = f"https://launchlibrary.net/1.4/launch?mode=verbose&next={total}"
     try:
         data = requests.get(url, timeout=5)
@@ -68,6 +68,7 @@ class Launch(object):
         self.context['t0_timestamp'] = launch_timestamp
         self.context['t0_local'] = time.strftime("%a %d %b %y %H:%M %Z (local)",
                                                  local_launch_time)
+        self.context['t0_month'] = time.strftime("%b", local_launch_time)
 
         image = data['rocket']['imageURL']
         if 'placeholder' in image:
