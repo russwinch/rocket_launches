@@ -4,7 +4,8 @@
         <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
         <script type=text/javascript src={{ url_for('static', filename='timer.js') }}></script>
     </head>
-    <body onload="startTime({{ t0_timestamp }})">
+    <body onload="startTime({{ t0_timestamp }},
+          {% if tbd_date or tbd_time %}true{% else %}false{% endif %})">
         <div id="nav">
             <a href="{{ prev }}">&lt;prev</a> | <a href="{{ next }}">next&gt;</a>
         </div>
