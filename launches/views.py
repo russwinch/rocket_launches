@@ -46,8 +46,8 @@ def launch_map(key):
         pass
     launch = launches[key]
     context = {
-        'latitude': launch.context['pad_latitude'],
-        'longitude': launch.context['pad_longitude'],
+        'pad_latitude': launch.context['pad_latitude'],
+        'pad_longitude': launch.context['pad_longitude'],
         'pad_name': launch.context['pad_name']
     }
     return render_template("map.html", key=key, **context)

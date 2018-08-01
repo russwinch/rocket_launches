@@ -66,7 +66,7 @@ class Launch(object):
         launch_timestamp = utc_launch_time.timestamp()
         local_launch_time = time.localtime(launch_timestamp)
         self.context['t0_timestamp'] = launch_timestamp
-        self.context['t0_local'] = time.strftime("%a %d %b %y %H:%M %Z (local)",
+        self.context['t0_local'] = time.strftime("%a %d %b %y %H:%M %Z",
                                                  local_launch_time)
         self.context['t0_month'] = time.strftime("%b", local_launch_time)
 

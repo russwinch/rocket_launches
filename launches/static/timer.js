@@ -1,6 +1,6 @@
 
-function startTime(t0, tbd) {
-    if (!tbd) {
+function startTime(t0) {
+    if (t0 != false) {
         now = Date.now();
         //
         // get total seconds between the times
