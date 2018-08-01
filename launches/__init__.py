@@ -1,15 +1,22 @@
 from flask import Flask
 import logging
 from logging.handlers import RotatingFileHandler
+import os
 
 from . import views
 
 
 def create_app():
-    log_stream_handler = logging.StreamHandler()
-    log_file_handler = RotatingFileHandler('logs/launch_api.log',
+    logging_folder = 'logs'
+    try:
+        os.mkdir(logging_folder)
+        print('logging folder created at: {logging_folder}')
+    except FileExistsError:
+        print('logging folder already exists')
+    log_file_handler = RotatingFileHandler(f'{logging_folder}/launch_api.log',
                                            maxBytes=10485760,  # 10MB
                                            backupCount=2)
+    log_stream_handler = logging.StreamHandler()
     logging.basicConfig(handlers=(log_stream_handler, log_file_handler),
                         # level=logging.INFO,
                         level=logging.DEBUG,

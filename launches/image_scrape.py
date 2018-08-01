@@ -9,15 +9,36 @@ tbs=iar:t   tall orientation
 tbs=sur:f   labeled for non-commercial use
 """
 from bs4 import BeautifulSoup
+import logging
 import requests
 
 
-def scrape_img_src(url):
-    req = requests.get(url)
-    soup = BeautifulSoup(req.text)
-    return soup.img['src']
+def scrape_img(url):
+    """Google image search scraping.
+    Extracts the first image from a page of google image search results and returns a
+    response object
+    """
+    image_search_page = requests.get(url)
+    image_search_soup = BeautifulSoup(image_search_page.text, features='html.parser')
+    img_url = image_search_soup.img['src']
+    return requests.get(img_url)
 
 
 def build_url(rocket_name):
     url = f"https://www.google.co.uk/search?q={rocket_name}+rocket+launch&tbs=iar:t,sur:f&tbm=isch"
     return url
+
+
+def save_img(request, filepath):
+    try:
+        with open(filepath, 'wb') as f:
+            f.write(request.content)
+            logging.info(f'Written image file: {filepath}')
+    except FileNotFoundError as e:
+        pass
+
+
+def get_rocket_img(rocket_name, filepath):
+    url = build_url(rocket_name)
+    img_request = scrape_img(url)
+    save_img(img_request, filepath)

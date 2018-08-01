@@ -2,10 +2,14 @@
 Retrieves data from the LL API and processes the result.
 """
 import datetime
+from flask import current_app as app
 import json
 import logging
+import os
 import requests
 import time
+
+import launches.image_scrape as image_scrape
 
 
 def request_launches(total=8):
@@ -43,6 +47,13 @@ class Launch(object):
                        }
         return status_dict[status_int]
 
+    @staticmethod
+    def _rocket_img_url(rocket_name):
+        static_path = f"{app.static_folder}/rocket_images/{rocket_name}.jpg"
+        if not os.access(static_path, os.R_OK):
+            image_scrape.get_rocket_img(rocket_name, static_path)
+        return f"{app.static_url_path}/rocket_images/{rocket_name}.jpg"
+
     def __init__(self, data):
         self.context = {
             'id': data['id'],
@@ -72,7 +83,7 @@ class Launch(object):
 
         image = data['rocket']['imageURL']
         if 'placeholder' in image:
-            image = None
+            image = self._rocket_img_url(self.context['rocket_name'])
         self.context['rocket_img'] = image
 
         missions = []
