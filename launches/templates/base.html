@@ -1,0 +1,16 @@
+<!doctype html>
+<html>
+    <head>
+        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+        <script type=text/javascript src={{ url_for('static', filename='timer.js') }}></script>
+        <title>{% block title %}Rocket launches{% endblock title %}</title>
+        {% block head %}
+        {% endblock head %}
+    </head>
+    <body {% block body_scripts %}{% endblock body_scripts %}>
+        {% block content %}
+            content goes here
+        {% endblock content %}
+    </body>
+</html>
+

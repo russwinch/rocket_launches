@@ -1,19 +1,15 @@
-<!doctype html>
-<html>
-    <head>
-        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
-        <title>
-            {{ mission_name }}
-        </title>
-    </head>
-    <body>
-        <div id="nav">
-            <a href="/launch/{{ key }}">&lt;back</a>
-        </div>
-        <h1>{{ mission_name }}</h1>
-        <div class="mission-type">{{ mission_type }}</div>
-        <div id="mission-desc">
-            {{ mission_desc }}
-        </div>
-    </body>
-</html>
+{% extends 'base.html' %}
+{% block title %}
+    {{ mission_name }}
+{% endblock title %}
+
+{% block content %}
+    <div id="nav">
+        <a href="/launch/{{ key }}">&lt;back</a>
+    </div>
+    <h1>{{ mission_name }}</h1>
+    <div class="mission-type">{{ mission_type }}</div>
+    <div id="mission-desc">
+        {{ mission_desc }}
+    </div>
+{% endblock content %}
