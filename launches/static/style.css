@@ -89,10 +89,9 @@ h1 {
 
 #rocket-img img {
     float: right;
-    height: 200px;
+    height: 150px;
     width: 110px;
     object-fit: cover;
-    margin-top: 5px;
 }
 
 #lower {

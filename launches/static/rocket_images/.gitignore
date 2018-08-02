@@ -1,2 +1,3 @@
+# temporary to ensure the directory is created. Add to docker file when containerised.
 *
 !.gitignore

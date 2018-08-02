@@ -7,6 +7,7 @@ import json
 import logging
 import os
 import requests
+from requests.exceptions import ReadTimeout, ConnectionError, HTTPError
 import time
 
 import launches.image_scrape as image_scrape
@@ -51,6 +52,7 @@ class Launch(object):
     def _rocket_img_url(rocket_name):
         static_path = f"{app.static_folder}/rocket_images/{rocket_name}.jpg"
         if not os.access(static_path, os.R_OK):
+            # scrape the image from google if it doesn't exist in the static folder
             image_scrape.get_rocket_img(rocket_name, static_path)
         return f"{app.static_url_path}/rocket_images/{rocket_name}.jpg"
 
@@ -83,7 +85,11 @@ class Launch(object):
 
         image = data['rocket']['imageURL']
         if 'placeholder' in image:
-            image = self._rocket_img_url(self.context['rocket_name'])
+            try:
+                image = self._rocket_img_url(self.context['rocket_name'])
+            except (TypeError, ConnectionError, ReadTimeout, HTTPError) as e:
+                # just use the placeholder for now and try again next time
+                logging.exception(e)
         self.context['rocket_img'] = image
 
         missions = []
