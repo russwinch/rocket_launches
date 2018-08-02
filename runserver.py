@@ -1,3 +1,4 @@
+"""Run this file to launch the app server."""
 from launches import create_app
 
 app = create_app()

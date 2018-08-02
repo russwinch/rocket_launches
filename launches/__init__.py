@@ -7,6 +7,7 @@ from . import views
 
 
 def create_app():
+    """Sets up logging and the routes for the app."""
     logging_folder = 'logs'
     try:
         os.mkdir(logging_folder)

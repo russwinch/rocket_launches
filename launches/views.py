@@ -1,3 +1,7 @@
+"""
+Views for the routes.
+Most logic is held in the imported files.
+"""
 import logging
 from flask import render_template
 
@@ -5,18 +9,23 @@ from . import api_request
 
 
 def index():
+    """TBC page which will need forwarding onto the first launch."""
     return("index is working")
 
 
 def upcoming_launch(key):
+    """
+    Shows details of each launch. The main page.
+
+    :key: index of the launch within the list of Launch objects
+    """
     logging.debug(key)
     try:
         launches = api_request.get_launches()
         launch = launches[key]
     except Exception as e:
+        # TODO: more error catching here
         raise e
-        # more error catching here
-        pass
     prev_launch, next_launch = key - 1, key + 1
     if prev_launch < 0:
         prev_launch = len(launches) - 1
@@ -28,6 +37,12 @@ def upcoming_launch(key):
 
 
 def mission_details(key, mkey):
+    """
+    Details of the mission. Linked from the launch page.
+
+    :key: index of the launch within the list of Launch objects
+    :mkey: index of the mission for that launch (there can be several)
+    """
     try:
         launches = api_request.get_launches()
     except Exception:
@@ -39,6 +54,11 @@ def mission_details(key, mkey):
 
 
 def launch_map(key):
+    """
+    Displays a full screen map of the launch site. Linked from the launch page.
+
+    :key: index of the launch within the list of Launch objects
+    """
     try:
         launches = api_request.get_launches()
     except Exception:

@@ -1,5 +1,5 @@
 """
-Retrieves data from the LL API and processes the result.
+Retrieves and processes data from the Launch Library API.
 """
 import datetime
 from flask import current_app as app
@@ -14,6 +14,12 @@ import launches.image_scrape as image_scrape
 
 
 def request_launches(total=8):
+    """
+    Makes a request to the Launch Library API.
+    Returns a dictionary.
+
+    :total: the number of launches to retrieve
+    """
     url = f"https://launchlibrary.net/1.4/launch?mode=verbose&next={total}"
     try:
         data = requests.get(url, timeout=5)
@@ -26,6 +32,10 @@ def request_launches(total=8):
 
 
 def get_launches():
+    """
+    Wrapper for the LL request and creation of Launch objects.
+    Returns a list of Launch objects.
+    """
     data_dict = request_launches()
     launches = [Launch(l) for l in data_dict['launches']]
 
@@ -35,12 +45,11 @@ def get_launches():
 
 class Launch(object):
     """
-    Contains all useful data about a launch.
-
-    :data: dictionary containing all details of one launch
+    Contains all useful data about a launch within the context dicionary.
     """
     @staticmethod
     def _status_decoder(status_int):
+        """Decodes status codes into strings"""
         status_dict = {1: 'Green',
                        2: 'Red',
                        3: 'Success',
@@ -50,6 +59,13 @@ class Launch(object):
 
     @staticmethod
     def _rocket_img_url(rocket_name):
+        """
+        Supplies a url for the image of a rocket.
+        This will be the local path; if it's not found there an attempt will be made
+        to scrape Google image search.
+
+        :rocket_name: the name of the rocket, as supplied by the Launch Library API
+        """
         static_path = f"{app.static_folder}/rocket_images/{rocket_name}.jpg"
         if not os.access(static_path, os.R_OK):
             # scrape the image from google if it doesn't exist in the static folder

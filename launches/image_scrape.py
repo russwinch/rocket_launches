@@ -25,15 +25,24 @@ def scrape_img(rocket_name):
     return requests.get(img_url)
 
 
-def save_img(request, filepath):
+def save_img(binary, filepath):
+    """
+    Writes an image binary to a local file.
+
+    :binary: content of the response object containing the binary of the image
+    :filepath: full local filepath where the file should be written
+    """
     try:
         with open(filepath, 'wb') as f:
-            f.write(request.content)
+            f.write(binary)
             logging.info(f'Written image file: {filepath}')
     except FileNotFoundError as e:
-        pass
+        # likely due to an error with the filepath and probably not going to work on
+        # another attempt
+        raise e
 
 
 def get_rocket_img(rocket_name, filepath):
-    img_request = scrape_img(rocket_name)
-    save_img(img_request, filepath)
+    """Wrapper for the scraping and local write of a rocket image"""
+    image = scrape_img(rocket_name)
+    save_img(image.content, filepath)
