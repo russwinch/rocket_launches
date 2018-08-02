@@ -13,13 +13,10 @@
             {{ rocket_name }}
         </title>
     </head>
-    <body onload="startTime(
-        {% if tbd_date or tbd_time %}
-            false
-        {% else %}
-            {{ t0_timestamp }}
-        {% endif %}
-    )">
+    <body
+        {% if not (tbd_date or tbd_time) %}
+           onload="startTime({{ t0_timestamp }})"
+        {% endif %}>
         <div id="nav">
             <a href="{{ prev }}">&lt;prev</a> | <a href="{{ next }}">next&gt;</a>
         </div>
