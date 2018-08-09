@@ -6,6 +6,7 @@ from flask import current_app as app
 import json
 import logging
 import os
+import re
 import requests
 from requests.exceptions import ReadTimeout, ConnectionError, HTTPError
 import time
@@ -100,12 +101,18 @@ class Launch(object):
         self.context['t0_month'] = time.strftime("%b", local_launch_time)
 
         image = data['rocket']['imageURL']
+
         if 'placeholder' in image:
             try:
                 image = self._rocket_img_url(self.context['rocket_name'])
             except (TypeError, ConnectionError, ReadTimeout, HTTPError) as e:
                 # just use the placeholder for now and try again next time
                 logging.exception(e)
+        else:
+            # get the smallest image possible
+            smallest_image = data['rocket']['imageSizes'][0]
+            image_re = re.compile(r'(.*_)\d*(.jpg)$')
+            image = image_re.sub(r'\g<1>'+str(smallest_image)+r'\g<2>', image)
         self.context['rocket_img'] = image
 
         missions = []
