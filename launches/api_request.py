@@ -86,6 +86,7 @@ class Launch(object):
             'hold_reason': data['holdreason'],
             'fail_reason': data['failreason'],
             'rocket_name': data['rocket']['name'],
+            'rocket_family_name': data['rocket']['familyname'],
             'utc_t0': data['net'],
             'tbd_date': data['tbddate'],
             'tbd_time': data['tbdtime']
@@ -103,11 +104,13 @@ class Launch(object):
         image = data['rocket']['imageURL']
 
         if 'placeholder' in image:
-            try:
-                image = self._rocket_img_url(self.context['rocket_name'])
-            except (TypeError, ConnectionError, ReadTimeout, HTTPError) as e:
-                # just use the placeholder for now and try again next time
-                logging.exception(e)
+            for name in (self.context['rocket_name'],
+                         self.context['rocket_family_name']):
+                try:
+                    image = self._rocket_img_url(name)
+                    break  # image found so no need to check again
+                except (TypeError, ConnectionError, ReadTimeout, HTTPError) as e:
+                    logging.exception(e)
         else:
             # get the smallest image possible
             smallest_image = data['rocket']['imageSizes'][0]
