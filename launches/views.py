@@ -22,7 +22,7 @@ def upcoming_launch(key):
     logging.debug(key)
     try:
         launches = api_request.get_launches()
-        launch = launches[key]
+        context = launches[key]
     except Exception as e:
         # TODO: more error catching here
         raise e
@@ -31,9 +31,9 @@ def upcoming_launch(key):
         prev_launch = len(launches) - 1
     if next_launch > len(launches) - 1:
         next_launch = 0
-    launch.context['next'] = next_launch
-    launch.context['prev'] = prev_launch
-    return render_template("launch.html", key=key, **launch.context)
+    context['next'] = next_launch
+    context['prev'] = prev_launch
+    return render_template("launch.html", key=key, **context)
 
 
 def mission_details(key, mkey):
@@ -49,7 +49,7 @@ def mission_details(key, mkey):
         # more error catching here
         pass
     launch = launches[key]
-    context = launch.context['missions'][mkey]
+    context = launch['missions'][mkey]
     return render_template("mission.html", key=key, **context)
 
 
@@ -66,8 +66,8 @@ def launch_map(key):
         pass
     launch = launches[key]
     context = {
-        'pad_latitude': launch.context['pad_latitude'],
-        'pad_longitude': launch.context['pad_longitude'],
-        'pad_name': launch.context['pad_name']
+        'pad_latitude': launch['pad_latitude'],
+        'pad_longitude': launch['pad_longitude'],
+        'pad_name': launch['pad_name']
     }
     return render_template("map.html", key=key, **context)

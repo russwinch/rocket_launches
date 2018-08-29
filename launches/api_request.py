@@ -11,36 +11,21 @@ import requests
 from requests.exceptions import ReadTimeout, ConnectionError, HTTPError
 import time
 
+# import image_scrape as image_scrape
 import launches.image_scrape as image_scrape
 
 
-def request_launches(total=8):
-    """
-    Makes a request to the Launch Library API.
-    Returns a dictionary.
-
-    :total: the number of launches to retrieve
-    """
-    url = f"https://launchlibrary.net/1.4/launch?mode=verbose&next={total}"
-    try:
-        data = requests.get(url, timeout=5)
-        logging.info('requested data')
-    except Exception:
-        # catch timeout etc here
-        pass
-    logging.debug(f"JSON: {json.dumps(data.json(), indent=2)}")
-    return data.json()
-
-
-def get_launches():
+def get_launches(total=8):
     """
     Wrapper for the LL request and creation of Launch objects.
     Returns a list of Launch objects.
     """
-    data_dict = request_launches()
-    launches = [Launch(l) for l in data_dict['launches']]
+    # Launch.api_request(total=total)
+    launches = Launch(total=total)
+    # data_dict = request_launches()
+    # launches = [Launch(l) for l in range(total)]
 
-    logging.debug(f"Generated context: {[launch.context for launch in launches]}")
+    # logging.debug(f"Generated context: {[launch.context for launch in launches]}")
     return launches
 
 
@@ -73,8 +58,39 @@ class Launch(object):
             image_scrape.get_rocket_img(rocket_name, static_path)
         return f"{app.static_url_path}/rocket_images/{rocket_name}.jpg"
 
-    def __init__(self, data):
-        self.context = {
+    def __init__(self, total):
+        self.total = total
+        self.api_request(self.total)
+        # self.set_context()
+        # self.set_context(self.data['launches'][key])
+    # launches = [Launch(l) for l in data_dict['launches']]
+
+    def __len__(self):
+        return self.total
+
+    def __getitem__(self, key):
+        return self.get_context(key)
+
+    def api_request(self, total):
+        """
+        Makes a request to the Launch Library API and generates a dictionary.
+
+        :total: the number of launches to retrieve
+        """
+        url = f"https://launchlibrary.net/1.4/launch?mode=verbose&next={total}"
+        try:
+            data = requests.get(url, timeout=5)
+            logging.info('requested data')
+        except Exception as e:
+            # catch timeout etc here
+            logging.exception(e)
+        else:
+            logging.debug(f"JSON: {json.dumps(data.json(), indent=2)}")
+            self.data = data.json()
+
+    def get_context(self, key):
+        data = self.data['launches'][key]
+        context = {
             'id': data['id'],
             'name': data['name'],
             'location': data['location']['name'],
@@ -96,16 +112,16 @@ class Launch(object):
                                                      "%Y%m%dT%H%M%SZ%z")
         launch_timestamp = utc_launch_time.timestamp()
         local_launch_time = time.localtime(launch_timestamp)
-        self.context['t0_timestamp'] = launch_timestamp
-        self.context['t0_local'] = time.strftime("%a %d %b %y %H:%M %Z",
+        context['t0_timestamp'] = launch_timestamp
+        context['t0_local'] = time.strftime("%a %d %b %y %H:%M %Z",
                                                  local_launch_time)
-        self.context['t0_month'] = time.strftime("%b", local_launch_time)
+        context['t0_month'] = time.strftime("%b", local_launch_time)
 
         image = data['rocket']['imageURL']
 
         if 'placeholder' in image:
-            for name in (self.context['rocket_name'],
-                         self.context['rocket_family_name']):
+            for name in (context['rocket_name'],
+                         context['rocket_family_name']):
                 try:
                     image = self._rocket_img_url(name)
                     break  # image found so no need to check again
@@ -116,7 +132,7 @@ class Launch(object):
             smallest_image = data['rocket']['imageSizes'][0]
             image_re = re.compile(r'(.*_)\d*(.jpg)$')
             image = image_re.sub(r'\g<1>'+str(smallest_image)+r'\g<2>', image)
-        self.context['rocket_img'] = image
+        context['rocket_img'] = image
 
         missions = []
         for k, m in enumerate(data['missions']):
@@ -125,8 +141,9 @@ class Launch(object):
                              'mission_desc': m['description'],
                              'mission_type': m['typeName']
                              })
-        self.context['missions'] = missions
+        context['missions'] = missions
+        return context
 
 
 if __name__ == '__main__':
-    get_launches()
+    launches = get_launches()
