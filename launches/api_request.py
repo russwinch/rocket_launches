@@ -25,7 +25,7 @@ def get_launches(total=8):
     # data_dict = request_launches()
     # launches = [Launch(l) for l in range(total)]
 
-    # logging.debug(f"Generated context: {[launch.context for launch in launches]}")
+    logging.debug(f"Generated context: {launch for launch in launches}")
     return launches
 
 
@@ -71,7 +71,7 @@ class Launch(object):
     def __getitem__(self, key):
         return self.get_context(key)
 
-    def api_request(self, total):
+    def api_request(self, total=8):
         """
         Makes a request to the Launch Library API and generates a dictionary.
 

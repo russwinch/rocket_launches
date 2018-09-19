@@ -7,13 +7,14 @@ from flask import render_template
 
 from . import api_request
 
+launches = api_request.get_launches()
 
 def index():
     """TBC page which will need forwarding onto the first launch."""
     return("index is working")
 
 
-def upcoming_launch(key):
+def upcoming_launch(key, launches=launches):
     """
     Shows details of each launch. The main page.
 
@@ -21,8 +22,10 @@ def upcoming_launch(key):
     """
     logging.debug(key)
     try:
-        launches = api_request.get_launches()
+        # launches = api_request.get_launches()
+        launches.api_request()
         context = launches[key]
+        # print(context)
     except Exception as e:
         # TODO: more error catching here
         raise e
@@ -36,34 +39,34 @@ def upcoming_launch(key):
     return render_template("launch.html", key=key, **context)
 
 
-def mission_details(key, mkey):
+def mission_details(key, mkey, launches=launches):
     """
     Details of the mission. Linked from the launch page.
 
     :key: index of the launch within the list of Launch objects
     :mkey: index of the mission for that launch (there can be several)
     """
-    try:
-        launches = api_request.get_launches()
-    except Exception:
-        # more error catching here
-        pass
+    # try:
+    #     # launches = api_request.get_launches()
+    # except Exception:
+    #     # more error catching here
+    #     pass
     launch = launches[key]
     context = launch['missions'][mkey]
     return render_template("mission.html", key=key, **context)
 
 
-def launch_map(key):
+def launch_map(key, launches=launches):
     """
     Displays a full screen map of the launch site. Linked from the launch page.
 
     :key: index of the launch within the list of Launch objects
     """
-    try:
-        launches = api_request.get_launches()
-    except Exception:
-        # more error catching here
-        pass
+    # try:
+    #     launches = api_request.get_launches()
+    # except Exception:
+    #     # more error catching here
+    #     pass
     launch = launches[key]
     context = {
         'pad_latitude': launch['pad_latitude'],
